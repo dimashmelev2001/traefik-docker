@@ -1,0 +1,14 @@
+---
+http:
+  services:
+    graylog-devops-project-site:
+      loadBalancer:
+        servers:
+          - url: "http://10.20.30.20:9000/"
+  
+  routers:
+    http-graylog-devops-project-site:
+      entryPoints:
+        - "web"
+      rule: "HostRegexp(`graylog.devops-project.site`)"
+      service: "graylog-devops-project-site"

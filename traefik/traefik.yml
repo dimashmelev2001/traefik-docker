@@ -1,0 +1,29 @@
+---
+api:
+  insecure: true
+  dashboard: true
+
+log:
+  level: DEBUG
+
+ping: {}
+
+entryPoints:
+  web:
+    address: ":80"
+    forwardedHeaders:
+      insecure: true
+  web-secure:
+    address: ":443"
+    forwardedHeaders:
+      insecure: true
+
+providers:
+  docker:
+    endpoint: "unix:///var/run/docker.sock"
+    exposedByDefault: false
+    swarmMode: true
+    watch: true
+  file:
+    directory: "/etc/traefik/traefik.conf.d/"
+    watch: true

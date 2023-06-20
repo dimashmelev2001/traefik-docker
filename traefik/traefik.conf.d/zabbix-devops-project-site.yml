@@ -1,0 +1,14 @@
+---
+http:
+  services:
+    zabbix-devops-project-site:
+      loadBalancer:
+        servers:
+          - url: "http://10.20.30.22:80/"
+  
+  routers:
+    http-zabbix-devops-project-site:
+      entryPoints:
+        - "web"
+      rule: "HostRegexp(`zabbix.devops-project.site`)"
+      service: "zabbix-devops-project-site"

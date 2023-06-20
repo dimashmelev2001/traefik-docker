@@ -1,0 +1,14 @@
+---
+http:
+  services:
+    dev-devops-project-site:
+      loadBalancer:
+        servers:
+          - url: "http://10.20.30.11:80/"
+  
+  routers:
+    http-dev-devops-project-site:
+      entryPoints:
+        - "web"
+      rule: "HostRegexp(`{subdomain:.+}-dev.devops-project.site`)"
+      service: "dev-devops-project-site"

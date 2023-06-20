@@ -1,0 +1,28 @@
+---
+stages:
+  - deploy
+  - build
+
+docker:build:
+  stage: build
+  image: docker:stable
+  when: manual
+  tags:
+    - gitlab-ci
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u ${CI_REGISTRY_USER} -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
+  script:
+    - docker build --pull -t "$CI_REGISTRY_IMAGE/traefik-3.0" .
+    - docker push "$CI_REGISTRY_IMAGE/traefik-3.0"
+
+deploy:bastion:traefik:
+  stage: deploy
+  tags: 
+    - bastion-runner
+  when: manual
+  before_script:
+    - docker login -u ${CI_REGISTRY_USER} -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
+  script:
+    - docker stack up --with-registry-auth -c docker-compose.yml ingress

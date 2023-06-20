@@ -1,0 +1,35 @@
+---
+version: '3.8'
+
+volumes:
+  data-storage:
+
+networks:
+  ingress-net:
+    name: ingress_net
+    driver: overlay
+    attachable: true
+
+services:
+  traefik:
+    image: $CI_REGISTRY_IMAGE/traefik-3.0:latest
+    hostname: ingress-traefik
+    ports:
+      - 80:80
+      - 443:443
+      - 8080:8080
+    networks:
+      - ingress-net
+    volumes:
+      - /var/run/docker.sock:/var/run/docker.sock
+      - data-storage:/etc/traefik/storage
+    deploy:
+      mode: replicated
+      placement:
+        constraints:
+          - node.role == manager
+      restart_policy:
+        condition: any
+        delay: 3s
+      labels:
+        - "traefik.enable=false"

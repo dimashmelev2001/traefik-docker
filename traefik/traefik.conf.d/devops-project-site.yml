@@ -1,0 +1,14 @@
+---
+http:
+  services:
+    devops-project-site:
+      loadBalancer:
+        servers:
+          - url: "http://10.20.30.30:80/"
+  
+  routers:
+    http-devops-project-site:
+      entryPoints:
+        - "web"
+      rule: "HostRegexp(`production.devops-project.site`)"
+      service: "devops-project-site"
